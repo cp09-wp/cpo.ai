@@ -1,101 +1,382 @@
-<html lang="en" dir="ltr" class="theme-fs-md" data-bs-theme="light" data-bs-theme-color="default">
-
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <link rel="icon" type="image/svg+xml" href="/favicon.ico">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Product Information</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Neural Text Synthesizer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-gradient: linear-gradient(135deg, #020617 0%, #0f172a 100%);
+            --glass-bg: rgba(16, 24, 39, 0.6);
+            --glass-border: rgba(56, 189, 248, 0.2);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-gradient: linear-gradient(90deg, #0ea5e9 0%, #8b5cf6 100%);
+            --glow: 0 0 20px rgba(14, 165, 233, 0.4);
+        }
 
-  <!-- Google Fonts and Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
-    integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer">
-  <link
-    href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;1,100;1,300&amp;display=swap"
-    rel="stylesheet">
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-  <!-- PWA Manifest & Icons -->
-  <link rel="manifest" href="/manifest.json">
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <link rel="apple-touch-icon" href="/assets/images/Sepio Logo Blue Background.jpg">
-  <meta name="msapplication-TileImage" content="/assets/images/Sepio Logo Blue Background.jpg">
-  <meta name="msapplication-TileColor" content="#3367D6">
-  <script type="module" crossorigin="" src="https://cp0.ai/assets/index-6beeccf9.js"></script>
-  <link rel="stylesheet" href="https://cp0.ai/assets/index-956d4912.css">
-  <link rel="modulepreload" as="script" crossorigin="" href="https://cp0.ai/assets/LandingPage-82b4f0c8.js">
-  <link rel="modulepreload" as="script" crossorigin="" href="https://cp0.ai/assets/api_urls-43546aca.js">
-  <link rel="modulepreload" as="script" crossorigin="" href="https://cp0.ai/assets/useTranslation-7b79c3b0.js">
-  <link rel="modulepreload" as="script" crossorigin="" href="https://cp0.ai/assets/Modal-16f84aca.js">
-  <link rel="modulepreload" as="script" crossorigin="" href="https://cp0.ai/assets/hasClass-8e373c2c.js">
-  <link rel="modulepreload" as="script" crossorigin="" href="https://cp0.ai/assets/useWillUnmount-a4571505.js">
-  <link rel="stylesheet" href="https://cp0.ai/assets/LandingPage-8faa5ba7.css">
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 4rem 2rem;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+            animation: slideUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(30px);
+            position: relative;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -1px; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(14, 165, 233, 0.8), transparent);
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: center;
+            letter-spacing: -1px;
+        }
+
+        .description {
+            text-align: center;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            font-size: 1.1rem;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        button {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-family: 'Outfit', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.6);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .input-group {
+            display: flex;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 50px;
+            padding: 8px 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .input-group label {
+            color: var(--text-secondary);
+            margin-right: 12px;
+            font-size: 0.95rem;
+        }
+
+        input[type="number"] {
+            background: transparent;
+            border: none;
+            color: #0ea5e9;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            width: 40px;
+            font-size: 1.1rem;
+            outline: none;
+            text-align: center;
+        }
+
+        #status {
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9rem;
+            color: #0ea5e9;
+            margin-bottom: 1.5rem;
+            min-height: 20px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pulsate {
+            animation: pulse 1.5s infinite;
+        }
+
+        #output {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .paragraph {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1.8rem;
+            border-radius: 16px;
+            border: 1px solid var(--glass-border);
+            line-height: 1.8;
+            font-weight: 300;
+            color: #e2e8f0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .paragraph::before {
+            content: '>';
+            position: absolute;
+            left: 1.2rem;
+            color: #0ea5e9;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            opacity: 0.5;
+        }
+
+        .paragraph-content {
+            padding-left: 1.5rem;
+        }
+
+        .cursor::after {
+            content: '▋';
+            animation: blink 1s step-start infinite;
+            color: #0ea5e9;
+            margin-left: 4px;
+        }
+
+        @keyframes slideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        @keyframes blink {
+            50% { opacity: 0; }
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 2rem 1.5rem;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
 </head>
+<body>
 
-<body class="light">
-  <div id="root">
-    <div class="App">
-      <header class="custom-header">
-        <div class="header-container">
-          <div class="header-logo"></div>
+    <div class="container">
+        <h1>AI Model Synthesizer</h1>
+        <p class="description">Neural network generating contextual linguistic structures in real-time.</p>
+        
+        <div class="controls">
+            <div class="input-group">
+                <label for="paragraphs">Output Blocks:</label>
+                <input type="number" id="paragraphs" min="1" max="10" value="3">
+            </div>
+            <button id="generateBtn" onclick="startGeneration()">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Synthesize Output
+            </button>
         </div>
-      </header>
-      <div class="product-page-wrapper">
-        <div class="product-page-container">
-          <div class="product-image-section"><img
-              src="https://s3.ap-south-1.amazonaws.com/sepio-prod/company-product-management-live/file-1727509051701.png"
-              alt="Saras Ghee 500 ml" class="product-image"></div>
-          <div class="product-info-section">
-            <div class="title-badge-row">
-              <h2 class="product-title" id="product-title"></h2>
-            </div>
-            <div class="uid-under-title" id="product-uid"></div>
-            <div class="product-detail-item"><span class="detail-value auth-status-text text-danger" id="product-status"></span></div>
-            <div class="product-attributes">
-              <div class="product-detail-item"><span class="detail-label">Batch No:</span><span class="detail-value" id="product-batch"></span></div>
-              <div class="product-detail-item"><span class="detail-label">Expiry Date:</span><span class="detail-value" id="product-expiry"></span></div>
-              <div class="product-detail-item"><span class="detail-label">Manufacture Date:</span><span class="detail-value" id="product-manufacture"></span></div>
-              <div class="product-detail-item"><span class="detail-label">Mrp:</span><span class="detail-value" id="product-mrp"></span></div>
-              <div class="product-detail-item"><span class="detail-label">Produced At:</span><span class="detail-value" id="product-produced-at"></span></div>
-            </div>
-            <div class="device-count-section">
-              <p class="device-count-text" id="device-count-text"></p>
-              <button class="view-more-btn">View more &#x25BC;</button>
-              <div class="mt-3 border p-2 rounded" style="display: none;" id="scans-container">
-                <h6 id="scans-count-heading"></h6>
-                <div id="scans-list"></div>
-                <p class="mt-2 text-muted" id="additional-scans-text"></p>
-              </div>
-            </div>
-          </div>
+
+        <div id="status">Connecting to neural core...</div>
+
+        <div id="output">
+            <!-- Text will be generated here -->
         </div>
-      </div>
     </div>
-  </div>
 
+    <script>
+        const aiVocab = [
+            "the", "of", "and", "a", "to", "in", "is", "you", "that", "it", "he", "was", "for", "on", "are", "as", "with", "his", "they", "I", 
+            "algorithm", "neural", "network", "data", "processing", "intelligence", "artificial", "learning", "model", "parameter",
+            "optimization", "variable", "dataset", "computation", "autonomous", "cognitive", "analysis", "synthesis", "vector",
+            "matrix", "tensor", "framework", "architecture", "logic", "heuristic", "iteration", "dynamic", "probability", "node",
+            "system", "interface", "integration", "predictive", "machine", "quantum", "sequence", "cluster", "pattern", "recognition",
+            "hyperparameter", "gradient", "descent", "activation", "function", "training", "epoch", "validation", "deployment",
+            "scalable", "semantic", "contextual", "linguistic", "transformer", "attention", "mechanism", "generation"
+        ];
 
+        function getRandomWord(isFirstWord = false) {
+            let word = aiVocab[Math.floor(Math.random() * aiVocab.length)];
+            if (isFirstWord) {
+                return word.charAt(0).toUpperCase() + word.slice(1);
+            }
+            return word;
+        }
 
-  <script src="https://cdn.jsdelivr.net/npm/fingerprintjs2@2.1.0/dist/fingerprint2.min.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const toggleBtn = document.querySelector('.view-more-btn');
-      const detailsDiv = document.querySelector('.mt-3.border.p-2.rounded');
+        function generateSentence() {
+            const numWords = Math.floor(Math.random() * 12) + 8; // 8 to 19 words
+            let sentence = [];
+            for (let i = 0; i < numWords; i++) {
+                sentence.push(getRandomWord(i === 0));
+            }
+            return sentence.join(" ") + ".";
+        }
 
-      if (toggleBtn && detailsDiv) {
-        toggleBtn.addEventListener('click', function () {
-          if (detailsDiv.style.display === 'none' || detailsDiv.style.display === '') {
-            detailsDiv.style.display = 'block';
-            toggleBtn.innerHTML = 'Hide details &#x25B2;';
-          } else {
-            detailsDiv.style.display = 'none';
-            toggleBtn.innerHTML = 'View more &#x25BC;';
-          }
-        });
-      }
-    });
-  </script>
-  <script src="index.js"></script>
+        function generateParagraph() {
+            const numSentences = Math.floor(Math.random() * 3) + 3; // 3 to 5 sentences
+            let paragraph = [];
+            for (let i = 0; i < numSentences; i++) {
+                paragraph.push(generateSentence());
+            }
+            return paragraph.join(" ");
+        }
+
+        let isGenerating = false;
+
+        async function typeText(element, text, speed = 15) {
+            element.classList.add('cursor');
+            for (let i = 0; i < text.length; i++) {
+                element.textContent += text.charAt(i);
+                const delay = speed + (Math.random() * 20 - 10);
+                await new Promise(r => setTimeout(r, delay));
+            }
+            element.classList.remove('cursor');
+        }
+
+        async function startGeneration() {
+            if (isGenerating) return;
+            isGenerating = true;
+
+            const outputDiv = document.getElementById('output');
+            const statusDiv = document.getElementById('status');
+            const btn = document.getElementById('generateBtn');
+            const numParagraphs = parseInt(document.getElementById('paragraphs').value) || 3;
+            
+            // UI Updates
+            btn.disabled = true;
+            btn.innerHTML = `
+                <svg class="pulsate" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+                Processing...
+            `;
+            outputDiv.innerHTML = '';
+            
+            statusDiv.style.opacity = '1';
+            statusDiv.textContent = 'Initializing language model...';
+            statusDiv.classList.add('pulsate');
+
+            await new Promise(r => setTimeout(r, 800));
+            statusDiv.textContent = 'Synthesizing contextual data streams...';
+
+            for (let i = 0; i < numParagraphs; i++) {
+                statusDiv.textContent = `Generating output block ${i + 1} of ${numParagraphs}...`;
+                
+                const pContainer = document.createElement('div');
+                pContainer.className = 'paragraph';
+                
+                const pContent = document.createElement('div');
+                pContent.className = 'paragraph-content';
+                pContainer.appendChild(pContent);
+                
+                outputDiv.appendChild(pContainer);
+
+                // Small delay between blocks
+                await new Promise(r => setTimeout(r, 400));
+                
+                const generatedText = generateParagraph();
+                await typeText(pContent, generatedText, 10); // Very fast typing
+            }
+
+            // Finish
+            statusDiv.classList.remove('pulsate');
+            statusDiv.textContent = 'Synthesis complete. Awaiting new prompt.';
+            btn.disabled = false;
+            btn.innerHTML = `
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+                Synthesize Output
+            `;
+            
+            setTimeout(() => {
+                if (!isGenerating) statusDiv.style.opacity = '0';
+            }, 3000);
+            
+            isGenerating = false;
+        }
+
+        // On load, show the ready state
+        window.onload = () => {
+            document.getElementById('status').style.opacity = '1';
+            document.getElementById('status').textContent = 'System ready.';
+            setTimeout(() => {
+                document.getElementById('status').style.opacity = '0';
+            }, 2000);
+        };
+    </script>
 </body>
-
 </html>
